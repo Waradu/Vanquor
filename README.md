@@ -31,13 +31,15 @@ Green (no kills..), yellow (1 kill..), red (2 kills..), dark_red (5 kills..), go
 
 They usually start 400 x 400 x 100 and end with 20 x 20 x 10. The maps should be built so it isnt possible to fall into the void.
 
-### Levels, Quests and Coins:
+### Levels, Achievements and Coins:
 
-You can earn Coins with quests. With Coins you can get a few advantages like: start boost (speed, jump), reduced ender pearl damage, more level/coin reward and less damage outside border.
+You can earn Coins with achievements. With Coins you can get a few advantages like: start boost (speed, jump), reduced ender pearl damage, more level/coin reward and less damage outside border.
 Also you can buy cosmetics like: Start Concrete Color, Particle aura, Name decorations and Chat emotes. 
 In every game you get levels for killing a player (if the player killed others you get more levels) (killing a whole team results in an ace and gives doubble the levels) collecting items etc.
 With Levels you get speedboost, strenghtboost, jumpboost and others. For evey action to get level ther is a chance to get a small amount of Coins ontop, guaranteed are kills and win.
-There are special rewards like at the end: didn't die, whole party didn't die, new kill record
+There are special rewards like at the end: didn't die, whole party didn't die, new kill record and killed a player that killed you.
+
+Achievement are for example get 100 kills, play for 5h or even join 10 times in a day.
 
 ### Shrinking Border:
 
