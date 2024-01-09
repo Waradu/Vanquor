@@ -1,0 +1,5 @@
+#true or false
+broadcast message?
+true
+op message?
+false

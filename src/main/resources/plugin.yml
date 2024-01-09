@@ -1,0 +1,16 @@
+name: Vanquor
+version: '${project.version}'
+main: dev.waradu.vanquor.Main
+api-version: '1.20'
+commands:
+  rl:
+    permission: vanquor.reload
+  spec:
+    permission: vanquor.spectator
+  start:
+    permission: vanquor.start
+  bar:
+    permission: vanquor.bar
+  party:
+    aliases:
+      - p
