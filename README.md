@@ -1,5 +1,5 @@
 !! THIS PLUGIN WILL NOT WORK 90% AND IS A BIG MESS RIGHT NOW !!
-- there is currently no server or playtest avavibale you have to add the plugin to your own server -
+! there is currently no server or playtest avavibale you have to add the plugin to your own server !
 
 # Vanquor: A brand new Gamemode
 also known as extended freeze tag.
