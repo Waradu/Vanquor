@@ -51,8 +51,12 @@ Introduce power-ups or special items that spawn randomly across the map, giving 
 ### Others:
 
 Leaderboard: Max Levels (in a game)/Wins/Winstreak/Kills (Player Kill)/Playtime/Games Played (Games Played to finish (won or loss, leaving won't count). Resets every week, top players get coins (you get the most coins from Games Played/Playtime).
+
 Stats: Kills, Wins, Winstreak, Losses, Killed, Coins, Max Level, Games played, Playtime
+
 Party: A party can only have a max of 4 players unless its an admin party (has to be changed by an admin). A party can't que for more or less playermode.
+
 Friends: Can join your party without invite and can be added without invite unless they are already in another party.
 Voice chat: mayyyybe.
+
 Ban: You know what you have to do to get banned (100% bans (confirmed by admin and longer then 6 months) reset all your coins/upgrades and stats)
