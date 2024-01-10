@@ -98,7 +98,6 @@ public class GameListener implements Listener {
         return head;
     }
 
-    // Handle inventory click event
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (gameAPI.isSpectator((Player) e.getWhoClicked()) && e.getView().getTitle().equals("Teleport Menu")) {
