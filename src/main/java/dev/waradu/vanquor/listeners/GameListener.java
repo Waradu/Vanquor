@@ -5,16 +5,20 @@ import dev.waradu.vanquor.utils.BossbarAPI;
 import dev.waradu.vanquor.utils.GameAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockReceiveGameEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -64,6 +68,49 @@ public class GameListener implements Listener {
         Player p = e.getPlayer();
         if (gameAPI.isSpectator(p)) {
             e.setCancelled(true);
+        }
+        if (gameAPI.isSpectator(p) && e.getItem() != null && e.getItem().getType() == Material.COMPASS) {
+            openTeleportMenu(p);
+        }
+    }
+
+    private void openTeleportMenu(Player player) {
+        int count = ((Bukkit.getOnlinePlayers().size() - 1 + 8) / 9 * 9);
+        Inventory menu = Bukkit.createInventory(null, count < 9 ? 9 : (Math.min(count, 54)), "Teleport Menu");
+
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            ItemStack head = getPlayerHead(onlinePlayer);
+
+            if (onlinePlayer != player) {
+                menu.addItem(head);
+            }
+        }
+
+        player.openInventory(menu);
+    }
+
+    private ItemStack getPlayerHead(Player player) {
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
+        meta.setOwningPlayer(player);
+        meta.setDisplayName("§r"+player.getName());
+        head.setItemMeta(meta);
+        return head;
+    }
+
+    // Handle inventory click event
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent e) {
+        if (gameAPI.isSpectator((Player) e.getWhoClicked()) && e.getView().getTitle().equals("Teleport Menu")) {
+            e.setCancelled(true);
+
+            if (e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.PLAYER_HEAD) {
+                Player targetPlayer = Bukkit.getPlayer(((SkullMeta) e.getCurrentItem().getItemMeta()).getOwningPlayer().getUniqueId());
+                if (targetPlayer != null) {
+                    e.getWhoClicked().teleport(targetPlayer.getLocation());
+                    e.getWhoClicked().closeInventory();
+                }
+            }
         }
     }
 
@@ -156,9 +203,9 @@ public class GameListener implements Listener {
             Bukkit.broadcastMessage(damaged.getName() + " should die:");
 
             if (lastDamager instanceof Player) {
-                Bukkit.broadcastMessage("- "+lastDamager.getName() + " is Player");
+                Bukkit.broadcastMessage("- " + lastDamager.getName() + " is Player");
             } else {
-                Bukkit.broadcastMessage("- "+lastDamager.getName() + " is not Player");
+                Bukkit.broadcastMessage("- " + lastDamager.getName() + " is not Player");
             }
             handlePlayerDeath(damaged, lastDamager);
         } else if (isPlayer) {

@@ -4,9 +4,11 @@ import dev.waradu.vanquor.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -132,6 +134,17 @@ public class GameAPI {
         inventories.put(player, player.getInventory().getContents().clone());
 
         player.getInventory().clear();
+
+        player.getInventory().setArmorContents(null);
+
+        ItemStack compass = new ItemStack(Material.COMPASS);
+
+        ItemMeta meta = compass.getItemMeta();
+
+        meta.setDisplayName("§r"+"Teleport to player");
+
+        compass.setItemMeta(meta);
+        player.getInventory().setItem(0, compass);
 
         player.addScoreboardTag("vanquor.spec");
 
