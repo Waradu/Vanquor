@@ -14,3 +14,7 @@ commands:
   party:
     aliases:
       - p
+      - pc
+  msg:
+    aliases:
+      - r

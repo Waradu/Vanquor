@@ -15,10 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GameAPI {
 
@@ -28,11 +25,11 @@ public class GameAPI {
     private final Map<Player, Player> lastDamagerMap = new HashMap<>();
     private final Map<Player, Set<Player>> killsMap = new HashMap<>();
     private int teamSize = 1;
-    private final Map<Player,
+    private final Map<UUID,
             ItemStack[]> inventories = new HashMap<>();
-    private final Map<Player, Boolean> spectator = new HashMap<>();
+    private final Map<UUID, Boolean> spectator = new HashMap<>();
 
-    public static Scoreboard createScoreboard() {
+    public Scoreboard createScoreboard() {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("scoreboard", Criteria.DUMMY, "scoreboard");
 
@@ -41,7 +38,17 @@ public class GameAPI {
 
         int counter = 0;
 
-        counter += Bukkit.getOnlinePlayers().size() + 1;
+        counter += Bukkit.getOnlinePlayers().size() + 3;
+
+        Score pa = objective.getScore("Players alive: " + Bukkit.getOnlinePlayers().size());
+        pa.setScore(counter);
+
+        counter--;
+
+        Score space = objective.getScore("");
+        space.setScore(counter);
+
+        counter--;
 
         Score first = objective.getScore("Killz:");
         first.setScore(counter);
@@ -106,10 +113,10 @@ public class GameAPI {
         return killsMap.get(player);
     }
 
-    public void setSpectator(Player player) {
+    public void setSpectator(Player player, Boolean isRejoining) {
         setCantPush(player);
 
-        spectator.put(player, true);
+        spectator.put(player.getUniqueId(), true);
 
         player.closeInventory();
         player.setInvulnerable(true);
@@ -131,7 +138,9 @@ public class GameAPI {
             onlinePlayer.hidePlayer(Main.getInstance(), player);
         }
 
-        inventories.put(player, player.getInventory().getContents().clone());
+        if (isRejoining) {
+            inventories.put(player.getUniqueId(), player.getInventory().getContents().clone());
+        }
 
         player.getInventory().clear();
 
@@ -141,7 +150,7 @@ public class GameAPI {
 
         ItemMeta meta = compass.getItemMeta();
 
-        meta.setDisplayName("§r"+"Teleport to player");
+        meta.setDisplayName("§r" + "Teleport to player");
 
         compass.setItemMeta(meta);
         player.getInventory().setItem(0, compass);
@@ -161,14 +170,19 @@ public class GameAPI {
     public void removeSpectator(Player player) {
         setCanPush(player);
 
-        spectator.remove(player);
+        spectator.remove(player.getUniqueId());
 
         player.setInvulnerable(false);
         player.setAllowFlight(false);
         player.setFlying(false);
 
         player.removeScoreboardTag("vanquor.spec");
-        player.getInventory().setContents(inventories.get(player));
+
+        player.getInventory().clear();
+
+        try {
+            player.getInventory().setContents(inventories.get(player.getUniqueId()));
+        } catch (NullPointerException ignored) {}
 
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
@@ -180,14 +194,14 @@ public class GameAPI {
     }
 
     public Boolean isSpectator(Player player) {
-        return spectator.getOrDefault(player, false) || player.getScoreboardTags().contains("vanquor.spec");
+        return spectator.getOrDefault(player.getUniqueId(), false) || player.getScoreboardTags().contains("vanquor.spec");
     }
 
     public Boolean toggleSpectator(Player player) {
         if (isSpectator(player)) {
             removeSpectator(player);
         } else {
-            setSpectator(player);
+            setSpectator(player, false);
         }
         return isSpectator(player);
     }

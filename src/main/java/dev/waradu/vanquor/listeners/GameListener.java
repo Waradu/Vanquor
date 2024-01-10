@@ -126,7 +126,7 @@ public class GameListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         if (gameAPI.isSpectator(p)) {
-            gameAPI.setSpectator(p);
+            gameAPI.setSpectator(p, false);
         }
     }
 

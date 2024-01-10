@@ -31,7 +31,7 @@ public final class Main extends JavaPlugin {
         getCommand("start").setExecutor(new StartCommand());
         getCommand("bar").setExecutor(new BarCommand());
         getCommand("party").setExecutor(new PartyCommand());
-        getCommand("p").setExecutor(new PartyCommand());
+        getCommand("msg").setExecutor(new MsgCommand());
 
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new GameListener(), this);
@@ -41,6 +41,8 @@ public final class Main extends JavaPlugin {
         saveConfig();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
+
+            p.setScoreboard(gameAPI.createScoreboard());
 
             for (Player players : Bukkit.getOnlinePlayers()) {
                 players.showPlayer(this, p);
@@ -66,7 +68,7 @@ public final class Main extends JavaPlugin {
     }
 
     public static String getPrefix(String subprefix) {
-        return Prefix + subprefix + " §8 > ";
+        return Prefix + subprefix + " §8> ";
     }
 }
 

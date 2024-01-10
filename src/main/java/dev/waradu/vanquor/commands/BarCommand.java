@@ -4,6 +4,7 @@ import dev.waradu.vanquor.CommandTypes;
 import dev.waradu.vanquor.Main;
 import dev.waradu.vanquor.utils.GameAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,7 +20,7 @@ public class BarCommand implements CommandExecutor {
         if (args.length == 1 && Objects.equals(args[0], "remove")){
             gameAPI.bossbarAPI.removeBossBars();
         } else{
-            sender.sendMessage(Main.getPrefix(CommandTypes.COMMAND_USAGE_ERROR) + "§c/bar remove");
+            sender.sendMessage(Main.getPrefix(CommandTypes.COMMAND_USAGE_ERROR) + ChatColor.RED+"/bar remove");
         }
 
         return true;

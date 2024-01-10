@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import dev.waradu.vanquor.Main;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class StartCommand implements CommandExecutor {
@@ -23,7 +24,26 @@ public class StartCommand implements CommandExecutor {
             sender.sendMessage(Main.getPrefix(CommandTypes.COMMAND_USAGE_ERROR) + "§c/start");
         }
 
+        int seconds = 10;
+        new BukkitRunnable() {
+            int remainingTime = seconds;
+
+            @Override
+            public void run() {
+                if (remainingTime < 0) {
+                    cancel();
+                    return;
+                }
+
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.setLevel(remainingTime);
+                    player.setExp(1);
+                }
+
+                remainingTime--;
+            }
+        }.runTaskTimer(Main.getInstance(), 20L, 20L);
+
         return true;
     }
-
 }

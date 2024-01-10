@@ -1,5 +1,8 @@
 package dev.waradu.vanquor.utils;
 
+import dev.waradu.vanquor.CommandTypes;
+import dev.waradu.vanquor.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Item;
@@ -7,16 +10,17 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Party {
     private String name = "";
-    private Player leader;
+    private UUID leader;
     private Boolean allowUninvitedPlayerJoin = false;
     private Boolean allowNonLeaderToInvite = true;
     private Color color = Color.WHITE;
     private Boolean isAdminParty = false;
-    private final ArrayList<Player> members = new ArrayList<>();
-    public final HashMap<Player, Player> playerInviteMap = new HashMap<>();
+    private final ArrayList<UUID> members = new ArrayList<>();
+    public final HashMap<UUID, UUID> playerInviteMap = new HashMap<>();
     public void setName(String name) {
         this.name = name;
     }
@@ -26,46 +30,48 @@ public class Party {
     }
 
     public void setLeader(Player leader) {
-        this.leader = leader;
+        this.leader = leader.getUniqueId();
     }
 
     public Player getLeader() {
-        return leader;
+        return Bukkit.getPlayer(this.leader);
     }
 
     public ArrayList<Player> getMembers() {
-        return members;
+        ArrayList<Player> playerList = new ArrayList<>();
+
+        Player leaderPlayer = getLeader();
+        if (leaderPlayer != null) {
+            playerList.add(leaderPlayer);
+        }
+
+        for (UUID uuid : members) {
+            Player player = Bukkit.getPlayer(uuid);
+
+            if (player != null && !player.equals(leaderPlayer)) {
+                playerList.add(player);
+            }
+        }
+
+        return playerList;
     }
 
     public void addMember(Player member) {
-        members.add(member);
-        if (!member.equals(leader))
-            member.sendMessage("You have been added to "+getName()+".");
-
-        for (Player player : members) {
-            if (player.equals(member))
-                continue;
-            player.sendMessage(member.getName() + " has joined the party.");
-        }
+        members.add(member.getUniqueId());
     }
 
     public void removeMember(Player member) {
-        members.remove(member);
-        member.sendMessage("You have been removed from "+getName()+".");
+        Player leader = Bukkit.getPlayer(this.leader);
 
-        for (Player player : members) {
-            if (player.equals(member))
-                continue;
-            player.sendMessage(member.getName() + " has left the party.");
-        }
+        members.remove(member.getUniqueId());
 
-        if (leader.equals(member)) {
-            leader = members.get(0);
-            leader.sendMessage("You are now the leader of the party.");
-        }
+        if (leader != null && leader.equals(member)) {
+            this.leader = members.get(0);
+            leader.sendMessage(Main.getPrefix(CommandTypes.PARTY) + "§6You are now the leader of the party.");
 
-        for (Player player : members) {
-            player.sendMessage(leader.getName() + " is now the leader of the party.");
+            for (Player player : getMembers()) {
+                player.sendMessage(Main.getPrefix(CommandTypes.PARTY) + "§a" + leader.getName() + " is now the leader of the party.");
+            }
         }
     }
 }

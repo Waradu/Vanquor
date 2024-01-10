@@ -79,5 +79,11 @@
     },
     "done": true
   },
+  "minecraft:recipes/misc/map": {
+    "criteria": {
+      "has_compass": "2024-01-10 09:12:45 +0100"
+    },
+    "done": true
+  },
   "DataVersion": 3578
 }
