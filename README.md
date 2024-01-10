@@ -27,7 +27,8 @@ In single-player mode, a player must eliminate every other player to win.
 
 ### Gameplay:
 
-You spawn in a circle around the center (max 12 in solo, 16 in doubbles, 12 in triples, 16 in quads). There is only 10 seconds of protection time after game start. In the map are Chests and Power-ups. Also hunger is disabled.
+You spawn in a circle around the center (max 12 in solo, 16 in doubbles, 12 in triples, 16 in quads). There is only 10 seconds of protection time after game start. 
+All minute there a random event happens like launch in the air, glow effect, only 5 hearts and randomize inventory sorting. In the map are Chests and Power-ups. Also hunger is disabled.
 Every player gets a few start items: Ender pearl, 64 Concrete blocks (They refill instatly, keep them in offhand). After 2 min all players get a glow effect representing the kill count of the player:
 Green (no kills..), yellow (1 kill..), red (2 kills..), dark_red (5 kills..), gold (10 kills..)
 
