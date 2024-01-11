@@ -9,10 +9,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConfigAPI {
-    public static File config;
-    public static FileConfiguration settings;
+    public File config;
+    public FileConfiguration settings;
 
-    public static void createConfig() {
+    public void createConfig() {
         config = new File(Main.getInstance().getDataFolder(), "config.yml");
         if (!config.exists()) {
             config.getParentFile().mkdirs();
@@ -27,7 +27,7 @@ public class ConfigAPI {
         }
     }
 
-    public static void saveConfig() {
+    public void saveConfig() {
         try{
             settings.save(config);
         } catch (IOException e) {

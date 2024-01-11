@@ -29,6 +29,10 @@ public class GameAPI {
             ItemStack[]> inventories = new HashMap<>();
     private final Map<UUID, Boolean> spectator = new HashMap<>();
 
+    public void init() {
+
+    }
+
     public Scoreboard createScoreboard() {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("scoreboard", Criteria.DUMMY, "scoreboard");

@@ -26,6 +26,8 @@ public final class Main extends JavaPlugin {
 
         instance = this;
 
+        gameAPI.init();
+
         getCommand("rl").setExecutor(new ReloadCommand());
         getCommand("spec").setExecutor(new SpectatorCommand());
         getCommand("start").setExecutor(new StartCommand());
@@ -35,10 +37,6 @@ public final class Main extends JavaPlugin {
 
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new GameListener(), this);
-
-        FileConfiguration config = getConfig();
-        config.set("Vanquor.enabled", true);
-        saveConfig();
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
