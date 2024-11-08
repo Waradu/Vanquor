@@ -8,4 +8,5 @@ public class CommandTypes {
     public static String COMMAND_FEEDBACK =  "§bRun";
     public static String GAME = "§9Game";
     public static String PARTY = "§dParty";
+    public static String WORLD = "§aWorld";
 }

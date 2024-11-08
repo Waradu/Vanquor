@@ -3,7 +3,7 @@ package dev.waradu.vanquor.commands;
 import dev.waradu.vanquor.CommandTypes;
 import dev.waradu.vanquor.Main;
 import dev.waradu.vanquor.utils.GameAPI;
-import dev.waradu.vanquor.utils.Party;
+import dev.waradu.vanquor.models.Party;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -44,13 +44,40 @@ public class PartyCommand implements CommandExecutor {
                     for (Player member : party.getMembers()) {
                         member.sendMessage(CommandTypes.PARTY + " §7" + sender.getName() + ": §f" + String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
                     }
-                } else if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("cr")) {
+                }
+                else if (args[0].equalsIgnoreCase("create") || args[0].equalsIgnoreCase("cr")) {
                     gameAPI.partyAPI.createParty((Player) sender);
 
                     sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + "§aYou created a party.");
-                } else if (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("j")) {
+                }
+                else if (args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("j")) {
 
-                } else if (args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("a")) {
+                }
+                else if (args[0].equalsIgnoreCase("promote") || args[0].equalsIgnoreCase("p")) {
+                    Party party = gameAPI.partyAPI.getPartyByPlayer((Player) sender);
+
+                    Player player = Bukkit.getPlayerExact(args[1]);
+
+                    if (!party.getLeader().equals((Player) sender)) {
+                        sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You are not the party leader.");
+                    }
+
+                    if (player != null && player.isOnline()) {
+                        if (party.getLeader().equals(player)) {
+                            sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You can't promote yourself.");
+                            return false;
+                        }
+                        if (gameAPI.partyAPI.leaveParty(player)) {
+                            sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.GREEN + "You promoted " + player.getName() + " to the leader.");
+                            player.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You are now the leader of the party.");
+                        } else {
+                            sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "Player " + player.getName() + " is not in your party.");
+                        }
+                    } else {
+                        sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "Player " + args[1] + " is not online.");
+                    }
+                }
+                else if (args[0].equalsIgnoreCase("accept") || args[0].equalsIgnoreCase("a")) {
                     Player player = Bukkit.getPlayerExact(args[1]);
 
                     if (player != null && player.isOnline()) {
@@ -63,7 +90,8 @@ public class PartyCommand implements CommandExecutor {
                     } else {
                         sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "Player " + args[1] + " is not online.");
                     }
-                } else if (args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("d")) {
+                }
+                else if (args[0].equalsIgnoreCase("deny") || args[0].equalsIgnoreCase("d")) {
                     Player player = Bukkit.getPlayerExact(args[1]);
 
                     if (player != null && player.isOnline()) {
@@ -76,19 +104,25 @@ public class PartyCommand implements CommandExecutor {
                     } else {
                         sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "Player " + args[1] + " is not online.");
                     }
-                } else if (args[0].equalsIgnoreCase("leave") || args[0].equalsIgnoreCase("lv")) {
+                }
+                else if (args[0].equalsIgnoreCase("leave") || args[0].equalsIgnoreCase("lv")) {
                     Boolean success = gameAPI.partyAPI.leaveParty((Player) sender);
                     if (success) {
                         sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + "§aYou left the party.");
                     } else {
                         sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You are not in a party.");
                     }
-                } else if (args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("k")) {
+                }
+                else if (args[0].equalsIgnoreCase("kick") || args[0].equalsIgnoreCase("k")) {
                     Party party = gameAPI.partyAPI.getPartyByPlayer((Player) sender);
 
                     Player player = Bukkit.getPlayerExact(args[1]);
 
-                    if (player != null && player.isOnline() && party.getLeader().equals((Player) sender)) {
+                    if (!party.getLeader().equals((Player) sender)) {
+                        sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You are not the party leader.");
+                    }
+
+                    if (player != null && player.isOnline()) {
                         if (party.getLeader().equals(player)) {
                             sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You can't kick yourself.");
                             return true;
@@ -102,7 +136,8 @@ public class PartyCommand implements CommandExecutor {
                     } else {
                         sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "Player " + args[1] + " is not online.");
                     }
-                } else if (args[0].equalsIgnoreCase("disband") || args[0].equalsIgnoreCase("db")) {
+                }
+                else if (args[0].equalsIgnoreCase("disband") || args[0].equalsIgnoreCase("db")) {
                     Party party = gameAPI.partyAPI.getPartyByPlayer((Player) sender);
 
                     if (party == null) {
@@ -123,7 +158,8 @@ public class PartyCommand implements CommandExecutor {
 
                         return true;
                     }
-                } else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("in")) {
+                }
+                else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("in")) {
                     StringBuilder actionBarText = new StringBuilder();
 
 
@@ -145,7 +181,8 @@ public class PartyCommand implements CommandExecutor {
 
 
                     gameAPI.partyAPI.sendActionBar((Player) sender, actionBarText.toString());
-                } else if (args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("i")) {
+                }
+                else if (args[0].equalsIgnoreCase("invite") || args[0].equalsIgnoreCase("i")) {
                     Party party = gameAPI.partyAPI.createParty((Player) sender);
 
                     List<Player> onlinePlayers = new ArrayList<>();
@@ -172,7 +209,8 @@ public class PartyCommand implements CommandExecutor {
                             sender.sendMessage("Invited " + player.getName() + " to " + party.getName() + ".");
                         }
                     }
-                } else if (args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l")) {
+                }
+                else if (args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("l")) {
                     Party party = gameAPI.partyAPI.getPartyByPlayer((Player) sender);
 
                     if (party == null) {
@@ -187,11 +225,22 @@ public class PartyCommand implements CommandExecutor {
                     String message = Main.getPrefix(CommandTypes.PARTY) + ChatColor.WHITE + playerList;
                     sender.sendMessage(message);
 
-                } else if (args[0].equalsIgnoreCase("settings") || args[0].equalsIgnoreCase("s")) {
+                }
+                else if (args[0].equalsIgnoreCase("settings") || args[0].equalsIgnoreCase("s")) {
                     Party party = gameAPI.partyAPI.getPartyByPlayer((Player) sender);
+
+                    if (party == null) {
+                        sender.sendMessage(Main.getPrefix(CommandTypes.PARTY) + ChatColor.RED + "You are not in a party.");
+                        return true;
+                    }
+
                     Player leader = party.getLeader();
 
                     if (leader != (Player) sender) {
+                        return false;
+                    }
+
+                    if (args.length < 2) {
                         return false;
                     }
 
@@ -207,7 +256,8 @@ public class PartyCommand implements CommandExecutor {
 
                         return true;
                     }
-                } else {
+                }
+                else {
                     Party party = gameAPI.partyAPI.createParty((Player) sender);
 
                     List<Player> onlinePlayers = new ArrayList<>();

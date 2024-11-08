@@ -34,17 +34,18 @@ public final class Main extends JavaPlugin {
         getCommand("bar").setExecutor(new BarCommand());
         getCommand("party").setExecutor(new PartyCommand());
         getCommand("msg").setExecutor(new MsgCommand());
+        getCommand("world").setExecutor(new WorldCommand());
 
         pluginManager.registerEvents(new ChatListener(), this);
         pluginManager.registerEvents(new GameListener(), this);
 
         for (Player p : Bukkit.getOnlinePlayers()) {
 
-            p.setScoreboard(gameAPI.createScoreboard());
-
-            for (Player players : Bukkit.getOnlinePlayers()) {
-                players.showPlayer(this, p);
-            }
+//            p.setScoreboard(gameAPI.createScoreboard());
+//
+//            for (Player players : Bukkit.getOnlinePlayers()) {
+//                players.showPlayer(this, p);
+//            }
         }
     }
 

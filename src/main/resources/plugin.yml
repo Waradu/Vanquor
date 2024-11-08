@@ -12,9 +12,13 @@ commands:
   bar:
     permission: vanquor.bar
   party:
+    permission: vanquor.party
     aliases:
       - p
       - pc
   msg:
+    permission: vanquor.msg
     aliases:
       - r
+  world:
+    permission: vanquor.world
